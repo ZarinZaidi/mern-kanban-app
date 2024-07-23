@@ -1,7 +1,7 @@
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
-import { Box, IconButton, TextField } from '@mui/material'
+import { Box, IconButton, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -22,7 +22,8 @@ const Board = () => {
   const [description, setDescription] = useState('')
   const [sections, setSections] = useState([])
   const [isFavourite, setIsFavourite] = useState(false)
-  const [icon, setIcon] = useState('')
+  // const [icon, setIcon] = useState('')
+  const [selectedBoardId, setSelectedBoardId] = useState(boardId)
 
   const boards = useSelector((state) => state.board.value)
   const favouriteList = useSelector((state) => state.favourites.value)
@@ -35,7 +36,7 @@ const Board = () => {
         setDescription(res.description)
         setSections(res.sections)
         setIsFavourite(res.favourite)
-        setIcon(res.icon)
+        // setIcon(res.icon)
       } catch (err) {
         alert(err)
       }
@@ -43,26 +44,26 @@ const Board = () => {
     getBoard()
   }, [boardId])
 
-  const onIconChange = async (newIcon) => {
-    let temp = [...boards]
-    const index = temp.findIndex(e => e.id === boardId)
-    temp[index] = { ...temp[index], icon: newIcon }
+  // const onIconChange = async (newIcon) => {
+  //   let temp = [...boards]
+  //   const index = temp.findIndex(e => e.id === boardId)
+  //   temp[index] = { ...temp[index], icon: newIcon }
 
-    if (isFavourite) {
-      let tempFavourite = [...favouriteList]
-      const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
-      tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], icon: newIcon }
-      dispatch(setFavouriteList(tempFavourite))
-    }
+  //   if (isFavourite) {
+  //     let tempFavourite = [...favouriteList]
+  //     const favouriteIndex = tempFavourite.findIndex(e => e.id === boardId)
+  //     tempFavourite[favouriteIndex] = { ...tempFavourite[favouriteIndex], icon: newIcon }
+  //     dispatch(setFavouriteList(tempFavourite))
+  //   }
 
-    setIcon(newIcon)
-    dispatch(setBoards(temp))
-    try {
-      await boardApi.update(boardId, { icon: newIcon })
-    } catch (err) {
-      alert(err)
-    }
-  }
+  //   setIcon(newIcon)
+  //   dispatch(setBoards(temp))
+  //   try {
+  //     await boardApi.update(boardId, { icon: newIcon })
+  //   } catch (err) {
+  //     alert(err)
+  //   }
+  // }
 
   const updateTitle = async (e) => {
     clearTimeout(timer)
@@ -140,6 +141,12 @@ const Board = () => {
     }
   }
 
+  const handleBoardChange = (event) => {
+    const newBoardId = event.target.value
+    setSelectedBoardId(newBoardId)
+    navigate(`/boards/${newBoardId}`)
+  }
+
   return (
     <>
       <Box sx={{
@@ -157,6 +164,20 @@ const Board = () => {
             )
           }
         </IconButton>
+        <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+          <InputLabel>Board</InputLabel>
+          <Select
+            value={selectedBoardId}
+            onChange={handleBoardChange}
+            label="Board"
+          >
+            {boards.map((board) => (
+              <MenuItem key={board.id} value={board.id}>
+                {board.title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <IconButton variant='outlined' color='error' onClick={deleteBoard}>
           <DeleteOutlinedIcon />
         </IconButton>

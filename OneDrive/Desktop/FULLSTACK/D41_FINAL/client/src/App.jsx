@@ -12,6 +12,7 @@ import Home from './pages/Home'
 import Board from './pages/Board'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
+import Report from './pages/Report'
 
 function App() {
   const theme = createTheme({
@@ -31,6 +32,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path='boards' element={<Home />} />
             <Route path='boards/:boardId' element={<Board />} />
+            <Route path='report' element={<Report />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -85,7 +85,7 @@ const FavouriteList = () => {
                           fontWeight='700'
                           sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                         >
-                          {item.icon} {item.title}
+                          {/* {item.icon}  */} {item.title}
                         </Typography>
                       </ListItemButton>
                     )}
